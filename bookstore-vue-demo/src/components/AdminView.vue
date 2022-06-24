@@ -10,7 +10,7 @@
             <a class="btn btn-outline-primary w-100" href="" role="button">Aggiunngi un nuovo libro</a>
         </div>
         <div class="text-center">
-            <form method="post" id="quantityCheck">
+            <form method="get" id="quantityCheck">
                 <div class="d-flex justify-content-around">
                     <div class="d-block">
                         <input class="m-1" type="radio" id="danger" value="0" name="quantityFilter"/>
@@ -24,6 +24,10 @@
                         <input class="m-1" type="radio" id="ok" value="10" name="quantityFilter"/>
                         <label for="ok">Scorte Magazzino normali</label><br />
                     </div>
+                    <div class="d-block">
+                        <input class="m-1" type="radio" id="nofilter" value="null" name="quantityFilter"/>
+                        <label for="nofilter">Nessun filtro</label><br />
+                    </div>
                 </div>
                 <div class="mt-1">
                     <input type="text" placeholder="Cerca..." name="search" />
@@ -34,7 +38,7 @@
     </div>
     <div class="row">
         <div v-if="loading" class="loading col-12">
-            Loading...
+            <p class="text-center">Loading...</p>
         </div>
 
         <div v-if="books" class="content row">
