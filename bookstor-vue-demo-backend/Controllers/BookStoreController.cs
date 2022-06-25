@@ -32,24 +32,65 @@ namespace bookstore_vue_demo_backend.Controllers.Api
                 return Ok(books);
             }
         }
-        private List<Book> SearchList(string? search, List<Book> books)
+        private List<Book> SearchList(string search, List<Book> books)
         {
             List<Book> searchedBooks = new();
-
-            foreach (Book book in books)
+            
+            if (search != null)
             {
-                if (book.Author.ToLower().Contains(search) || book.Title.ToLower().Contains(search))
+                foreach (Book book in books)
                 {
-                    searchedBooks.Add(book);
+                    if (book.Author.ToLower().Contains(search) || book.Title.ToLower().Contains(search))
+                    {
+                        searchedBooks.Add(book);
+                    }
                 }
             }
+            else
+            {
+                return books;
+            }
+
             return searchedBooks;
+        }
+
+
+        [HttpGet]
+        public IActionResult AdminGet(int? quantityFilter, string? search)
+        {
+            using (BookStoreContext db = new BookStoreContext())
+            {
+                if (quantityFilter <= 0)
+                {
+                    List<Book> books = db.Books.Where(book => book.Quantity <= 0).Include(book => book.Category).ToList();
+                    books = SearchList(search, books);
+                    return Ok(books);
+                }
+                else if (quantityFilter <= 9)
+                {
+                    List<Book> books = db.Books.Where(book => book.Quantity <= 9 && book.Quantity > 0).Include(book => book.Category).ToList();
+                    books = SearchList(search, books);
+                    return Ok(books);
+                }
+                else if (quantityFilter > 9)
+                {
+                    List<Book> books = db.Books.Where(book => book.Quantity > 9).Include(book => book.Category).ToList();
+                    books = SearchList(search, books);
+                    return Ok(books);
+                }
+                else
+                {
+                    List<Book> books = db.Books.Include(book => book.Category).ToList();
+                    books = SearchList(search, books);
+                    return Ok(books);
+                }
+            }
         }
 
         [HttpGet]
         public IActionResult Details(int id)
         {
-            Book book = null;
+            Book? book = null;
             using (BookStoreContext db = new BookStoreContext())
             {
                 book = db.Books.Where(book => book.Id == id).Include(book => book.Category).FirstOrDefault();

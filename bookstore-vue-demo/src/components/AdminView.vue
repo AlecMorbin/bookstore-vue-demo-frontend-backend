@@ -11,26 +11,26 @@
         </div>
         <div class="text-center">
             <form method="get" id="quantityCheck">
-                <div class="d-flex justify-content-around">
-                    <div class="d-block">
-                        <input class="m-1" type="radio" id="danger" value="0" name="quantityFilter"/>
+                <div class="d-flex justify-content-around rounded " style="background-color: #ddd">
+                    <div class="d-block" >
+                        <input class="m-1" type="radio" id="danger" :value="0" name="quantityFilter" v-model="quantityFilter"/>
                         <label for="danger">Scorte Magazzino finite</label>
                     </div>
                     <div class="d-block">
-                        <input class="m-1" type="radio" id="warning" value="9" name="quantityFilter"/>
+                        <input class="m-1" type="radio" id="warning" :value="9" name="quantityFilter" v-model="quantityFilter"/>
                         <label for="warning">Scorte Magazzino a rischio</label>
                     </div>
                     <div class="d-block">
-                        <input class="m-1" type="radio" id="ok" value="10" name="quantityFilter"/>
+                        <input class="m-1" type="radio" id="ok" :value="10" name="quantityFilter" v-model="quantityFilter"/>
                         <label for="ok">Scorte Magazzino normali</label><br />
                     </div>
                     <div class="d-block">
-                        <input class="m-1" type="radio" id="nofilter" value="null" name="quantityFilter"/>
+                        <input class="m-1" type="radio" id="nofilter" :value="undefined" name="quantityFilter" v-model="quantityFilter"/>
                         <label for="nofilter">Nessun filtro</label><br />
                     </div>
                 </div>
                 <div class="mt-1">
-                    <input type="text" placeholder="Cerca..." name="search" />
+                    <input type="text" placeholder="Cerca..." name="search" v-model="search" />
                     <input  type="submit" value="Cerca" />
                 </div>
             </form>
@@ -82,7 +82,9 @@
         data() {
             return {
                 loading: false,
-                books: null
+                books: null,
+                search: '',
+                quantityFilter: ''
             };
         },
         created() {
@@ -92,14 +94,22 @@
         },
         watch: {
             // call again the method if the route changes
-            '$route': 'fetchData'
+            '$route': 'fetchData',
+            search : 'fetchData',
+            quantityFilter : 'fetchData'
+
         },
         methods: {
             fetchData() {
                 this.post = null;
                 this.loading = true;
-
-                fetch('https://localhost:5001/api/bookstore/get')
+                let search = this.search;
+                let quantityFilter = this.quantityFilter;
+                if (quantityFilter === undefined)
+                {
+                    quantityFilter = '';
+                }
+                fetch('https://localhost:5001/Api/BookStore/AdminGet?quantityFilter='+quantityFilter+'&search='+search)
                     .then(r => r.json())
                     .then(json => {
                         this.books = json;
