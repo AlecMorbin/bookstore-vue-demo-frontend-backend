@@ -13,47 +13,69 @@ namespace bookstore_vue_demo_backend.Controllers.Api
         public IActionResult Get(string? category , string? searchString)
         {
 
-            List<Book> books = new List<Book>();
+            IQueryable<Book> books = null;
             using(BookStoreContext db = new BookStoreContext())
             {
-                books = db.Books.Include(book => book.Category).ToList();
+                books = db.Books;
 
                 if (category != "Tutte le categorie" && !String.IsNullOrEmpty(category))
                 {
-                    books = db.Books.Where(book => book.Category.Name == category).Include(book => book.Category).ToList();
+                    books = books.Where(book => book.Category.Name == category);
                 }
-                if (String.IsNullOrEmpty(searchString) == false && searchString != "undefined")
+
+                if (!String.IsNullOrEmpty(searchString) && searchString != "undefined")
                 {
-                  books = SearchList(searchString,books);
+                    books = books.Where(book => book.Author.ToLower().Contains(searchString) || book.Title.ToLower().Contains(searchString));
                 }
 
 
-                
-                return Ok(books);
+                if(books == null)
+                return Ok(books.Include(book => book.Category).ToList());
             }
+            return NotFound();
         }
-        private List<Book> SearchList(string search, List<Book> books)
+
+        [HttpGet]
+        public IActionResult AdminGet(int? quantityFilter, string? search)
         {
-            List<Book> searchedBooks = new();
-            
-            if (search != null)
+            IQueryable<Book>? books = null;
+            using (BookStoreContext db = new())
             {
-                foreach (Book book in books)
+                books = db.Books;
+
+                if (!String.IsNullOrEmpty(search))
                 {
-                    if (book.Author.ToLower().Contains(search) || book.Title.ToLower().Contains(search))
+                    books = db.Books.Where(book => book.Author.ToLower().Contains(search) || book.Title.ToLower().Contains(search));
+                }
+
+                if(quantityFilter != null)
+                {
+                    if (quantityFilter <= 0)
                     {
-                        searchedBooks.Add(book);
+                        books = books.Where(book => book.Quantity <= 0);
+                    }
+                    else if (quantityFilter <= 9)
+                    {
+                        books = books.Where(book => book.Quantity <= 9 && book.Quantity > 0);
+                    }
+                    else if (quantityFilter > 9)
+                    {
+                        books = books.Where(book => book.Quantity > 9);
                     }
                 }
-            }
-            else
-            {
-                return books;
+
+
+                if (books != null)
+                {
+                    return Ok(books.Include(book => book.Category).ToList());
+                }
             }
 
-            return searchedBooks;
+
+            return NotFound();
         }
 
+        /*
 
         [HttpGet]
         public IActionResult AdminGet(int? quantityFilter, string? search)
@@ -86,7 +108,7 @@ namespace bookstore_vue_demo_backend.Controllers.Api
                 }
             }
         }
-
+        */
         [HttpGet]
         public IActionResult Details(int id)
         {

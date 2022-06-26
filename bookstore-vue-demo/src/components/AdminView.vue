@@ -31,7 +31,7 @@
                 </div>
                 <div class="mt-1">
                     <input type="text" placeholder="Cerca..." name="search" v-model="search" />
-                    <input  type="submit" value="Cerca" />
+                    <!-- <input  type="submit" value="Cerca" /> -->
                 </div>
             </form>
         </div>
@@ -104,6 +104,7 @@
                 this.post = null;
                 this.loading = true;
                 let search = this.search;
+                console.log(search);
                 let quantityFilter = this.quantityFilter;
                 if (quantityFilter === undefined)
                 {
@@ -113,7 +114,9 @@
                     .then(r => r.json())
                     .then(json => {
                         this.books = json;
+                        console.log(this.books);
                         this.loading = false;
+                        console.log(this.loading);
                         return;
                     });
             }
