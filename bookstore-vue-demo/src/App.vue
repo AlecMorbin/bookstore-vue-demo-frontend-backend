@@ -7,17 +7,17 @@
     <a class="nav-link disabled">Disabled</a>
   </nav>
   <div class="container">
-    <AdminView />
+    <DetailsView />
   </div>
 </template>
 
 <script>
-import AdminView from './components/AdminView.vue'
+import DetailsView from './components/DetailsView.vue'
 
 export default {
   name: 'App',
   components: {
-     AdminView
+     DetailsView,
   }
 }
 </script>

@@ -45,7 +45,7 @@ namespace bookstore_vue_demo_backend.Controllers.Api
 
                 if (!String.IsNullOrEmpty(search))
                 {
-                    books = db.Books.Where(book => book.Author.ToLower().Contains(search) || book.Title.ToLower().Contains(search));
+                    books = books.Where(book => book.Author.ToLower().Contains(search) || book.Title.ToLower().Contains(search));
                 }
 
                 if(quantityFilter != null)
@@ -75,40 +75,6 @@ namespace bookstore_vue_demo_backend.Controllers.Api
             return NotFound();
         }
 
-        /*
-
-        [HttpGet]
-        public IActionResult AdminGet(int? quantityFilter, string? search)
-        {
-            using (BookStoreContext db = new BookStoreContext())
-            {
-                if (quantityFilter <= 0)
-                {
-                    List<Book> books = db.Books.Where(book => book.Quantity <= 0).Include(book => book.Category).ToList();
-                    books = SearchList(search, books);
-                    return Ok(books);
-                }
-                else if (quantityFilter <= 9)
-                {
-                    List<Book> books = db.Books.Where(book => book.Quantity <= 9 && book.Quantity > 0).Include(book => book.Category).ToList();
-                    books = SearchList(search, books);
-                    return Ok(books);
-                }
-                else if (quantityFilter > 9)
-                {
-                    List<Book> books = db.Books.Where(book => book.Quantity > 9).Include(book => book.Category).ToList();
-                    books = SearchList(search, books);
-                    return Ok(books);
-                }
-                else
-                {
-                    List<Book> books = db.Books.Include(book => book.Category).ToList();
-                    books = SearchList(search, books);
-                    return Ok(books);
-                }
-            }
-        }
-        */
         [HttpGet]
         public IActionResult Details(int id)
         {

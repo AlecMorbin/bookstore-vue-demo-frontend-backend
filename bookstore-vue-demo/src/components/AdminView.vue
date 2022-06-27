@@ -101,7 +101,7 @@
         },
         methods: {
             fetchData() {
-                this.post = null;
+                this.books = null;
                 this.loading = true;
                 let search = this.search;
                 console.log(search);
