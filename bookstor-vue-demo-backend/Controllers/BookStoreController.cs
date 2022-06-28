@@ -10,11 +10,11 @@ namespace bookstore_vue_demo_backend.Controllers.Api
     public class BookStoreController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get(string? category , string? searchString)
+        public IActionResult Get(string? category, string? searchString)
         {
 
             IQueryable<Book> books = null;
-            using(BookStoreContext db = new BookStoreContext())
+            using (BookStoreContext db = new BookStoreContext())
             {
                 books = db.Books;
 
@@ -29,8 +29,8 @@ namespace bookstore_vue_demo_backend.Controllers.Api
                 }
 
 
-                if(books == null)
-                return Ok(books.Include(book => book.Category).ToList());
+                if (books == null)
+                    return Ok(books.Include(book => book.Category).ToList());
             }
             return NotFound();
         }
@@ -48,7 +48,7 @@ namespace bookstore_vue_demo_backend.Controllers.Api
                     books = books.Where(book => book.Author.ToLower().Contains(search) || book.Title.ToLower().Contains(search));
                 }
 
-                if(quantityFilter != null)
+                if (quantityFilter != null)
                 {
                     if (quantityFilter <= 0)
                     {
@@ -83,7 +83,7 @@ namespace bookstore_vue_demo_backend.Controllers.Api
             {
                 book = db.Books.Where(book => book.Id == id).Include(book => book.Category).FirstOrDefault();
             }
-            if(book == null)
+            if (book == null)
             {
                 return NotFound();
             }
@@ -148,11 +148,28 @@ namespace bookstore_vue_demo_backend.Controllers.Api
         public IActionResult GetCategories()
         {
             List<Category> categories = new List<Category>();
-            using(BookStoreContext db = new BookStoreContext())
+            using (BookStoreContext db = new BookStoreContext())
             {
                 categories = db.Categories.ToList();
             }
             return Ok(categories);
+        }
+
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            using (BookStoreContext db = new BookStoreContext())
+            {
+                Book? books = db.Books.Find(id);
+                if (books != null)
+                {
+                    db.Books.Remove(books);
+                    db.SaveChanges();
+                    return Ok();
+                }
+            }
+            return NotFound();
         }
     }
 }

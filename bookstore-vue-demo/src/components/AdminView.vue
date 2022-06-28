@@ -25,7 +25,7 @@
                         <label for="ok">Scorte Magazzino normali</label><br />
                     </div>
                     <div class="d-block">
-                        <input class="m-1" type="radio" id="nofilter" :value="undefined" name="quantityFilter" v-model="quantityFilter"/>
+                        <input checked class="m-1" type="radio" id="nofilter" :value="undefined" name="quantityFilter" v-model="quantityFilter"/>
                         <label for="nofilter">Nessun filtro</label><br />
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                                     <router-link :to="{name: 'Details', params: {id: book.id}}" class="btn btn-primary btn-lg d-block my-1" role="button"><i class="fa-solid fa-info"></i></router-link>
                                     <a href="#" class="btn btn-success btn-lg d-block my-1" role="button" ><i class="fa-solid fa-plus"></i></a>
                                     <a href="#" class="btn btn-warning btn-lg d-block my-1" role="button"><i class="fa-solid fa-pen"></i></a>
-                                    <a href="#" class="btn btn-danger btn-lg d-block my-1 w-100" role="button"><i class="fa-solid fa-ban"></i></a>
+                                    <button class="btn btn-danger btn-lg d-block my-1 w-100" role="button" @click="remove(book.id)"><i class="fa-solid fa-ban"></i></button>
                                 </td>
                         </tr>
                     </tbody>
@@ -81,6 +81,7 @@
 
 <script lang="js">
     import { defineComponent } from 'vue';
+    import axios from 'axios';
 
     export default defineComponent({
         data() {
@@ -88,7 +89,8 @@
                 loading: false,
                 books: null,
                 search: '',
-                quantityFilter: ''
+                quantityFilter: '',
+                removeStatus: false,
             };
         },
         created() {
@@ -100,7 +102,8 @@
             // call again the method if the route changes
             '$route': 'fetchData',
             search : 'fetchData',
-            quantityFilter : 'fetchData'
+            quantityFilter : 'fetchData',
+            removeStatus : 'fetchData'
 
         },
         methods: {
@@ -114,15 +117,22 @@
                 {
                     quantityFilter = '';
                 }
-                fetch('https://localhost:5001/Api/BookStore/AdminGet?quantityFilter='+quantityFilter+'&search='+search)
-                    .then(r => r.json())
-                    .then(json => {
-                        this.books = json;
+                axios
+                    .get('https://localhost:5001/Api/BookStore/AdminGet?quantityFilter='+quantityFilter+'&search='+search)
+                    .then((res) => {
+                        this.books = res.data;
                         //console.log(this.books);
                         this.loading = false;
                         //console.log(this.loading);
                         return;
                     });
+            },
+            async remove(id){
+                await axios
+                    .delete('https://localhost:5001/Api/BookStore/Delete?id='+id)
+                    .then(res => console.log('Success'))
+                    .catch(err => console.log('Error',err))
+                this.fetchData();
             }
         },
     });
