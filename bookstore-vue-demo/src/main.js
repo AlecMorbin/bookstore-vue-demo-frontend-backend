@@ -5,6 +5,7 @@ import { createRouter,createWebHistory } from 'vue-router'
 import Home from  './components/AdminView.vue'
 import Details from './components/DetailsView.vue'
 import NotFound from './components/NotFound.vue'
+import AddBook from './components/AddBookView.vue'
 
 const routes = [
     {
@@ -19,10 +20,15 @@ const routes = [
         props: true,
     },
     {
+        path: '/addbook',
+        name: 'AddBook',
+        component: AddBook,
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'NotFound',
         component: NotFound,
-    }
+    },
 ]
 
 const router = createRouter({

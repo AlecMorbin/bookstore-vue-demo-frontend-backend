@@ -7,10 +7,10 @@
     </div>
     <div class="row mb-3">
         <div class="col-lg-3 col-md-6 col-12 mx-auto mb-3">
-            <a class="btn btn-outline-primary w-100" href="" role="button">Aggiunngi un nuovo libro</a>
+            <router-link to="AddBook" class="btn btn-outline-primary w-100"  role="button">Aggiunngi un nuovo libro</router-link>
         </div>
         <div class="text-center">
-            <form method="get" id="quantityCheck">
+            <form id="quantityCheck">
                 <div class="d-flex justify-content-around rounded " style="background-color: #ddd">
                     <div class="d-block" >
                         <input class="m-1" type="radio" id="danger" :value="0" name="quantityFilter" v-model="quantityFilter"/>
@@ -130,7 +130,7 @@
             async remove(id){
                 await axios
                     .delete('https://localhost:5001/Api/BookStore/Delete?id='+id)
-                    .then(res => console.log('Success'))
+                    .then(res => console.log('Success',res))
                     .catch(err => console.log('Error',err))
                 this.fetchData();
             }

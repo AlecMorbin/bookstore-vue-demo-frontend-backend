@@ -20,6 +20,6 @@ namespace bookstore_vue_demo_backend.Models
             Name = name;
         }
         [JsonIgnore]
-        public List <Book> books { get; set; }
+        public List <Book>? books { get; set; }
     }
 }

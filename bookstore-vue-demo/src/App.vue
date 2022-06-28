@@ -2,7 +2,7 @@
   <nav class="nav">
     <img src="./assets/Logo.png" alt="Logo">
     <router-link class="nav-link" to="/">Home</router-link>
-    <!-- <router-link class="nav-link" to="/details">Details</router-link> -->
+    <router-link class="nav-link" to="/addbook">Add Book</router-link>
   </nav>
   <div class="container">
       <router-view />

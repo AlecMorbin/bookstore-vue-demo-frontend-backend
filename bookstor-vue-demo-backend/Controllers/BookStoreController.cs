@@ -155,6 +155,28 @@ namespace bookstore_vue_demo_backend.Controllers.Api
             return Ok(categories);
         }
 
+        [HttpPost]
+        public IActionResult Create(Book data)
+        {
+            using (BookStoreContext db = new BookStoreContext())
+            {
+                Book bookToCreate = new();
+                bookToCreate.Title = data.Title;
+                bookToCreate.Price = data.Price;
+                bookToCreate.Description = data.Description;
+                bookToCreate.CategoryId = data.CategoryId;
+                bookToCreate.UrlImage = data.UrlImage;
+                bookToCreate.Quantity = data.Quantity;
+                bookToCreate.NumberOfLikes = data.NumberOfLikes;
+                bookToCreate.Author = data.Author;
+
+                db.Books.Add(bookToCreate);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
 
         [HttpDelete]
         public IActionResult Delete(int id)
