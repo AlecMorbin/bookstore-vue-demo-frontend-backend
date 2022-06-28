@@ -1,23 +1,18 @@
 <template>
   <nav class="nav">
     <img src="./assets/Logo.png" alt="Logo">
-    <a class="nav-link active" aria-current="page" href="#">Active</a>
-    <a class="nav-link" href="#">Link</a>
-    <a class="nav-link" href="#">Link</a>
-    <a class="nav-link disabled">Disabled</a>
+    <router-link class="nav-link" to="/">Home</router-link>
+    <!-- <router-link class="nav-link" to="/details">Details</router-link> -->
   </nav>
   <div class="container">
-    <DetailsView />
+      <router-view />
   </div>
 </template>
 
 <script>
-import DetailsView from './components/DetailsView.vue'
-
 export default {
   name: 'App',
   components: {
-     DetailsView,
   }
 }
 </script>

@@ -48,9 +48,10 @@
 import axios from "axios";
 export default {
   name: "DetailsView",
+  props: ['id'],
   mounted: function () {
     axios
-      .get("https://localhost:5001/Api/BookStore/Details?id=7")
+      .get("https://localhost:5001/Api/BookStore/Details?id="+this.id)
       .then((res) => {
         this.book = res.data;
         this.category = res.data.category;
@@ -58,7 +59,7 @@ export default {
   },
   data() {
     return {
-      book: null
+      book: null,
     };
   },
 };

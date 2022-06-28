@@ -31,7 +31,6 @@
                 </div>
                 <div class="mt-1">
                     <input type="text" placeholder="Cerca..." name="search" v-model="search" />
-                    <!-- <input  type="submit" value="Cerca" /> -->
                 </div>
             </form>
         </div>
@@ -66,7 +65,12 @@
                                     <i v-if="book.quantity <= 0" class="fa-solid fa-triangle-exclamation text-danger"></i>
                                     <i v-else-if="book.quantity <= 9" class="fa-solid fa-triangle-exclamation text-warning"></i>
                                 </td>
-                                <td></td>
+                                <td>
+                                    <router-link :to="{name: 'Details', params: {id: book.id}}" class="btn btn-primary btn-lg d-block my-1" role="button"><i class="fa-solid fa-info"></i></router-link>
+                                    <a href="#" class="btn btn-success btn-lg d-block my-1" role="button" ><i class="fa-solid fa-plus"></i></a>
+                                    <a href="#" class="btn btn-warning btn-lg d-block my-1" role="button"><i class="fa-solid fa-pen"></i></a>
+                                    <a href="#" class="btn btn-danger btn-lg d-block my-1 w-100" role="button"><i class="fa-solid fa-ban"></i></a>
+                                </td>
                         </tr>
                     </tbody>
                 </table>
@@ -104,7 +108,7 @@
                 this.books = null;
                 this.loading = true;
                 let search = this.search;
-                console.log(search);
+                //console.log(search);
                 let quantityFilter = this.quantityFilter;
                 if (quantityFilter === undefined)
                 {
@@ -114,9 +118,9 @@
                     .then(r => r.json())
                     .then(json => {
                         this.books = json;
-                        console.log(this.books);
+                        //console.log(this.books);
                         this.loading = false;
-                        console.log(this.loading);
+                        //console.log(this.loading);
                         return;
                     });
             }
