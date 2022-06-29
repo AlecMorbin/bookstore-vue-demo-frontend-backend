@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-md-6 col-12 my-2">
                     <span>Categoria:</span>
-                    <select required  class="form-select" aria-label="Default select example" v-model="book.category.id">
+                    <select required  class="form-select" aria-label="Default select example" v-model="book.categoryId">
                       <option selected>Seleziona una categoria</option>
                       <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{cat.name}}</option>
                     </select>
@@ -41,6 +41,12 @@
             </form>
         </div>
     </div>
+    <div class="row mt-5" v-if="responseStatus == true">
+        <div class="col-md-6 offset-3 shadow-lg rounded text-center">
+            <h3><i class="fa-solid fa-circle-check text-success"></i><br> Libro aggiunto con successo </h3>
+            <router-link to="/">Torna al menu</router-link>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -49,9 +55,19 @@ export default {
     data() {
         return {
             book: {
-                category: {},
+                id: 0,
+                title :  '' ,
+                author :  '' ,
+                nullurlImage: '',
+                description: '',
+                price: 0,
+                quantity: 0,
+                numberOfLikes: 0,
+                categoryId: 0,
+
             },
             categories: [],
+            responseStatus: false
         }
     },
     created() {
@@ -70,7 +86,11 @@ export default {
         sendForm(){
             axios
                 .post('https://localhost:5001/Api/BookStore/Create',this.book)
-                .then(res => console.log(res))
+                .then(res => {
+                    console.log(res);
+                    if(res.status === 200)
+                        this.responseStatus = true;
+                    })
                 .catch(err => {
                     console.log('error',err)
                     console.log(err.config.data)

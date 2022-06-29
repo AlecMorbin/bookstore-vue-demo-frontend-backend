@@ -160,21 +160,24 @@ namespace bookstore_vue_demo_backend.Controllers.Api
         {
             using (BookStoreContext db = new BookStoreContext())
             {
-                Book bookToCreate = new();
-                bookToCreate.Title = data.Title;
-                bookToCreate.Price = data.Price;
-                bookToCreate.Description = data.Description;
-                bookToCreate.CategoryId = data.CategoryId;
-                bookToCreate.UrlImage = data.UrlImage;
-                bookToCreate.Quantity = data.Quantity;
-                bookToCreate.NumberOfLikes = data.NumberOfLikes;
-                bookToCreate.Author = data.Author;
-
+                Book bookToCreate = new()
+                {
+                    Title = data.Title,
+                    Price = data.Price,
+                    Description = data.Description,
+                    CategoryId = data.CategoryId,
+                    UrlImage = data.UrlImage,
+                    Quantity = data.Quantity,
+                    NumberOfLikes = data.NumberOfLikes,
+                    Author = data.Author
+                };
+                
+                bookToCreate.Category =  db.Categories.Find(bookToCreate.CategoryId);
                 db.Books.Add(bookToCreate);
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index");
+            return Ok();
         }
 
 
